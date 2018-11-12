@@ -1,46 +1,29 @@
-.show{
-  animation: show-item 2s ease-in forwards;
-  -webkit-animation: show-item 2s ease-in forwards;
-}
-
-.hide{
-  animation: hide-item 2s ease-in forwards;
-  -webkit-animation: hide-item 2s ease-in forwards;
-}
-
-@keyframes hide-item{
-  /**
-    显示-->隐藏
-  **/
-  0% { 
-    opacity: 1;
-    color: red;
-  }
-  50% {
-    opacity: 0.5;
-    color: green;
-  }
-  100% {
+.fade-enter{
     opacity: 0;
-    color: blue;
-  }
 }
 
-
-@keyframes show-item{
-  /**
-    隐藏-->显示
-  **/
-  0% { 
+.fade-enter-active{
     opacity: 1;
-    color: red;
-  }
-  50% {
-    opacity: 0.5;
-    color: green;
-  }
-  100% {
+    transition: opacity 1s ease-in;
+    -webkit-transition: opacity 1s ease-in;
+    -moz-transition: opacity 1s ease-in;
+    -ms-transition: opacity 1s ease-in;
+    -o-transition: opacity 1s ease-in;
+}
+.fade-enter-done {
+    opacity: 1;
+}
+.fade-exit {
+    opacity: 1;
+}
+.fade-exit-active {
     opacity: 0;
-    color: blue;
-  }
+    transition: opacity 1s ease-out;
+    -webkit-transition: opacity 1s ease-out;
+    -moz-transition: opacity 1s ease-out;
+    -ms-transition: opacity 1s ease-out;
+    -o-transition: opacity 1s ease-out;
+}
+.fade-exit-done {
+    opacity: 0;
 }
