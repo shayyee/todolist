@@ -13,6 +13,12 @@ class TodoItem extends Component {
     const { deleteItem, index } = this.props;
     deleteItem(index);
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.content !== this.props.content) {
+      return true;
+    }
+    return false;
+  }
   render() {
     const { content, prefix } = this.props
     return (
@@ -26,7 +32,7 @@ class TodoItem extends Component {
 
 TodoItem.propTypes = {
   prefix: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
   deleteItem: PropTypes.func,
   index: PropTypes.number
 }
