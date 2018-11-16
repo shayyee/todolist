@@ -1,76 +1,50 @@
 import React, {Component, Fragment} from 'react'
-import TodoItem from './TodoItem'
-import axios from 'axios'
-import './todolist.css'
+import 'antd/dist/antd.css'
+import { Input, Button, List } from 'antd';
+import store from '../store';
 
 class TodoList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      inputValue: '',
-      list: []
-    }
+    this.state = store.getState();
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleStoreChange = this.handleStoreChange.bind(this);
     this.handleBtnClick = this.handleBtnClick.bind(this);
-    this.handleItemDelete = this.handleItemDelete.bind(this);
+    store.subscribe(this.handleStoreChange)
   }
-
   handleInputChange(e) {
-    // 异步函数式setState
-    const value = e.target.value;
-    this.setState(() => ({
-      inputValue: value
-    }))
+    const action = {
+      type: 'CHANGE_INPUT_VALUE',
+      value: e.target.value
+    }
+    store.dispatch(action);
   }
-
+  handleStoreChange() {
+    this.setState(store.getState())
+  }
   handleBtnClick() {
-    this.setState((prevState) => ({
-      list: [...prevState.list, prevState.inputValue],
-      inputValue: ''
-    }))
-  }
-
-  handleItemDelete(index) {
-    this.setState((prevState) => {
-      const list = [...prevState.list];
-      list.splice(index, 1);
-      return {list}
-    })
-  }
-
-  getTodoItem() {
-    return this.state.list.map((item, index) => {
-      return (
-        <TodoItem
-          key={index}
-          content={item}
-          index={index}
-          deleteItem={this.handleItemDelete}
-        />
-      )
-    })
-  }
-  componentDidMount() {
-    axios.get('/api/todolist').then(res => {
-      this.setState(() => ( {list: [...res.data] }))
-    }).catch((err) => {
-      console.log(err)
-    })
+    const action = {
+      type: 'ADD_TODO_ITEM'
+    }
+    store.dispatch(action)
   }
   render() {
     return (
       <Fragment>
-        <div>
-          <label htmlFor="insertArea">输入内容：</label>
-          <input id="insertArea"
-                 className="input"
-                 value={this.state.inputValue}
-                 onChange={this.handleInputChange}/>
-          <button onClick={this.handleBtnClick}>提交</button>
+        <div style={{marginLeft: 10, marginTop: 10}}>
+          <Input 
+            value={this.state.inputValue} 
+            placeholder="todo info" 
+            style={{width: 300,marginRight: 10}}
+            onChange={this.handleInputChange}/>
+          <Button type="primary" onClick={this.handleBtnClick}>提交</Button>
         </div>
-        <ul>
-          {this.getTodoItem()}
-        </ul>
+        <List
+          style={{marginLeft: 10, marginTop: 20, width: 300}}
+          bordered
+          dataSource={this.state.list}
+          renderItem={item => (<List.Item>{item}</List.Item>)}
+        />
       </Fragment>
     )
   }
